@@ -1,0 +1,26 @@
+<main class="main">
+  <div class="content">
+    <h1>WordSwap</h1>
+    <label for="analysis-text">Текст для аналізу</label>
+    <textarea id="analysis-text" name="text" rows="8" #editor [value]="text()" (input)="onTextInput(editor.value)"></textarea>
+    <p>Символів: {{ text().length }} · Слів: {{ wordCount() }}</p>
+    <button type="button" (click)="readSelection(editor)">Знайти синоніми</button>
+    <button type="button" [disabled]="text().length === 0" (click)="copyText()">Скопіювати текст</button>
+  </div>
+  <section class="symbol">
+    <h2>Синоніми</h2>
+    @if (selection(); as fragment) {
+      <p>Виділено: «{{ fragment.selectedText }}»</p>
+    }
+    <p role="status">{{ message() }}</p>
+    @if (synonyms().length > 0) {
+      <ul>
+        @for (word of synonyms(); track word) {
+          <li>
+            <button type="button" (click)="replaceSelection(word)">{{ word }}</button>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</main>
