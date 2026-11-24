@@ -1,1 +1,14 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #fcf9f5;
+  color: #10132c;
+  font: 1rem/1.5 "Segoe UI", Arial, sans-serif;
+}
+
+button, textarea {
+  font: inherit;
+}

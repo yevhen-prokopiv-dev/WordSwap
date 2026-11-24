@@ -1,26 +1,32 @@
 <main class="main">
-  <div class="content">
-    <h1>WordSwap</h1>
-    <label for="analysis-text">Текст для аналізу</label>
-    <textarea id="analysis-text" name="text" rows="8" #editor [value]="text()" (input)="onTextInput(editor.value)"></textarea>
-    <p>Символів: {{ text().length }} · Слів: {{ wordCount() }}</p>
-    <button type="button" (click)="readSelection(editor)">Знайти синоніми</button>
-    <button type="button" [disabled]="text().length === 0" (click)="copyText()">Скопіювати текст</button>
+  <h1><span class="sr-only">WordSwap — </span>Аналізатор фраз та слів</h1>
+  <div class="panels">
+    <section class="panel" aria-labelledby="editor-title">
+      <h2 id="editor-title"><label for="analysis-text">Текст для аналізу</label></h2>
+      <textarea id="analysis-text" name="text" rows="6" #editor [value]="text()" (input)="onTextInput(editor.value)"></textarea>
+      <p class="counts"><span>Символів: {{ text().length }}</span><span>Слів: {{ wordCount() }}</span></p>
+      <div class="actions">
+        <button class="primary" type="button" (click)="readSelection(editor)">Знайти синоніми</button>
+        <button type="button" [disabled]="text().length === 0" (click)="copyText()"><span class="copy-icon" aria-hidden="true"></span>Скопіювати текст</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="synonyms-title">
+      <h2 id="synonyms-title">Синоніми</h2>
+      @if (selection(); as fragment) {
+        <p class="note">Для «{{ fragment.selectedText }}»</p>
+      } @else if (!message()) {
+        <p class="note">Виділи слово або фразу й натисни «Знайти синоніми».</p>
+      }
+      <p class="status" role="status">{{ message() }}</p>
+      @if (synonyms().length > 0) {
+        <ul>
+          @for (word of synonyms(); track word) {
+            <li><button class="synonym" type="button" (click)="replaceSelection(word)">{{ word }}<span aria-hidden="true">⇄</span></button></li>
+          }
+        </ul>
+        <p class="note">Натисни на синонім, щоб замінити виділений текст.</p>
+      }
+    </section>
   </div>
-  <section class="symbol">
-    <h2>Синоніми</h2>
-    @if (selection(); as fragment) {
-      <p>Виділено: «{{ fragment.selectedText }}»</p>
-    }
-    <p role="status">{{ message() }}</p>
-    @if (synonyms().length > 0) {
-      <ul>
-        @for (word of synonyms(); track word) {
-          <li>
-            <button type="button" (click)="replaceSelection(word)">{{ word }}</button>
-          </li>
-        }
-      </ul>
-    }
-  </section>
 </main>
